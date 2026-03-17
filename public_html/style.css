@@ -1,0 +1,149 @@
+:root {
+    --header-color: #ffffff;
+    --desc-color: #bfbfd6;
+    --button-bg: #ffffff;
+    --button-text: #10101a;
+    --button-bg-hover: #e0e0e0;
+    --main-title-size: 2.2rem;
+    --main-desc-size: 0.9rem;
+}
+
+/* ===============================
+   FUNDO ANIMADO
+================================ */
+body {
+    min-height: 100vh;
+    margin: 0;
+    position: relative;
+
+    font-family: 'Press Start 2P', monospace;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+
+    background: linear-gradient(-45deg, #08021b, #212222, #040b24, #170120);
+    background-size: 400% 400%;
+    animation: gradientAnim 16s ease-in-out infinite;
+}
+
+@keyframes gradientAnim {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ===============================
+   PARTICLES
+================================ */
+#particles-js {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* ===============================
+   ANIMAÇÃO DE APARIÇÃO
+================================ */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===============================
+   CONTEÚDO
+================================ */
+header,
+main {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+}
+
+header {
+    margin-bottom: 18px;
+    margin-top: 40px;
+    animation-delay: 0.2s;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 2.2rem;
+    animation-delay: 0.5s;
+}
+
+/* ===============================
+   TEXTOS
+================================ */
+h1 {
+    color: var(--header-color);
+    font-size: var(--main-title-size);
+    margin-bottom: 1rem;
+    letter-spacing: 0.12em;
+    line-height: 1.4;
+    text-transform: uppercase;
+}
+
+header p {
+    color: var(--desc-color);
+    font-size: var(--main-desc-size);
+    line-height: 1.8;
+}
+
+h3 {
+    color: var(--header-color);
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    letter-spacing: 0.1em;
+}
+
+/* ===============================
+   BOTÃO (ESTILO MINECRAFT)
+================================ */
+a[href^="http"] {
+    background: var(--button-bg);
+    color: var(--button-text);
+
+    padding: 1em 2.2em;
+    font-size: 0.8rem;
+    text-decoration: none;
+
+    border-radius: 4px;
+    box-shadow: 0 4px 0 #000;
+
+    transition: transform 0.15s ease, background 0.2s ease;
+    margin-top: 10px;
+}
+
+a[href^="http"]:hover {
+    background: var(--button-bg-hover);
+    transform: translateY(-2px);
+}
+
+/* ===============================
+   RESPONSIVO
+================================ */
+@media (max-width: 600px) {
+    h1 {
+        font-size: 1.2rem;
+    }
+
+    a[href^="http"] {
+        font-size: 0.7rem;
+        padding: 0.8em 1.6em;
+    }
+}
