@@ -1,0 +1,351 @@
+/* ============================
+   Tema GitHub com animações
+   ============================ */
+
+/* Reset e base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg: #f6f8fa;
+  --panel: #ffffff;
+  --text: #24292f;
+  --muted: #57606a;
+  --border: #d0d7de;
+
+  --primary: #0969da;        /* link azul GitHub */
+  --primary-hover: #0756b3;
+
+  --accent: #2ea44f;         /* botão verde GitHub */
+  --accent-hover: #2c974b;
+
+  --radius: 8px;
+  --shadow-lg: 0 8px 24px rgba(140,149,159,0.2);
+  --shadow-sm: 0 1px 0 rgba(27,31,36,0.04);
+
+  --code-bg: #f6f8fa;
+  --code-text: #24292f;
+}
+
+/* Dark mode automático (estilo GitHub Dark Dimmed) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --text: #c9d1d9;
+    --muted: #8b949e;
+    --border: #30363d;
+
+    --primary: #58a6ff;
+    --primary-hover: #388bfd;
+
+    --accent: #2ea043;
+    --accent-hover: #238636;
+
+    --code-bg: #0d1117;
+    --code-text: #c9d1d9;
+  }
+}
+
+/* Acessibilidade: respeita redução de movimento */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 32px 20px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans",
+               "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  line-height: 1.6;
+  /* Centraliza o conteúdo e limita largura como o GitHub faz */
+  max-width: 980px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 360ms ease-out both;
+}
+
+/* Cabeçalhos */
+h1, h2, h3 {
+  color: var(--text);
+  line-height: 1.25;
+  margin: 16px 0 12px 0;
+  letter-spacing: -0.01em;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  animation: slideInDown 380ms ease-out both;
+}
+
+h2 {
+  font-size: 1.375rem;
+  font-weight: 700;
+  margin-top: 28px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border);
+  animation: fadeIn 380ms ease-out both;
+}
+
+/* Parágrafos */
+p {
+  color: var(--muted);
+  margin: 10px 0;
+}
+
+/* Links com sublinhado animado ao estilo GitHub */
+a {
+  color: var(--primary);
+  text-decoration: none;
+  position: relative;
+  transition: color 160ms ease;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 2px;
+  background: currentColor;
+  transition: width 220ms ease;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+a:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(9,105,218,0.35);
+  border-radius: 4px;
+}
+
+/* Listas em formato de cartões (Top 10 + resultados) */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  ul {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (min-width: 920px) {
+  ul {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
+li {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  transition: transform 160ms ease, box-shadow 200ms ease, border-color 160ms ease;
+  overflow: hidden;
+  animation: fadeInUp 420ms ease both;
+}
+
+li:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+  border-color: color-mix(in srgb, var(--border) 60%, var(--primary) 40%);
+}
+
+/* Links dentro dos cartões ocupam toda a área clicável */
+li > a {
+  display: block;
+  padding: 14px 14px 12px 14px;
+  color: var(--text);
+}
+
+li > a:hover {
+  color: var(--text);
+}
+
+/* Título forte, categoria sutil */
+li > a strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+li > a em,
+li > a small {
+  color: var(--muted);
+}
+
+/* Formulário de pesquisa */
+form#searchForm {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 18px 0 8px 0;
+  flex-wrap: wrap;
+  animation: fadeIn 420ms ease both;
+}
+
+#searchInput {
+  flex: 1 1 240px;
+  min-width: 220px;
+  height: 40px;
+  padding: 8px 12px;
+  color: var(--text);
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+#searchInput::placeholder {
+  color: color-mix(in srgb, var(--muted) 85%, var(--text) 15%);
+}
+
+#searchInput:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(9,105,218,0.25);
+}
+
+/* Botões animados ao estilo GitHub */
+button,
+input[type="submit"],
+input[type="button"] {
+  cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--accent) 70%, black 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 92%, white 8%) 0%, var(--accent) 100%);
+  color: #ffffff;
+  font-weight: 600;
+  height: 40px;
+  padding: 0 14px;
+  border-radius: 6px;
+  box-shadow: 0 1px 0 rgba(27,31,36,0.1);
+  transition: transform 80ms ease, box-shadow 160ms ease, filter 160ms ease, background 160ms ease, border-color 160ms ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  filter: brightness(1.02);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(46, 164, 79, 0.25);
+  border-color: color-mix(in srgb, var(--accent-hover) 70%, black 10%);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent-hover) 92%, white 8%) 0%, var(--accent-hover) 100%);
+}
+
+button:active,
+input[type="submit"]:active,
+input[type="button"]:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 0 rgba(27,31,36,0.12) inset;
+}
+
+button:focus-visible,
+input[type="submit"]:focus-visible,
+input[type="button"]:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(46,164,79,0.35);
+}
+
+/* Estados de mensagem da busca */
+#searchResults {
+  margin-top: 10px;
+  animation: fadeIn 300ms ease both;
+}
+
+#searchResults p {
+  margin: 8px 0;
+  color: var(--muted);
+}
+
+#searchResults p strong {
+  color: var(--text);
+}
+
+/* Realce sutil para o convite do Discord dentro da lista */
+ul li a[href*="discord"] {
+  position: relative;
+  padding-right: 36px;
+}
+
+/* Códigos e trechos (se um dia forem usados nos posts) */
+code, pre, kbd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+               "DejaVu Sans Mono", "Courier New", monospace;
+  font-size: 0.95em;
+}
+
+code {
+  background: var(--code-bg);
+  color: var(--code-text);
+  border: 1px solid var(--border);
+  padding: 2px 6px;
+  border-radius: 6px;
+}
+
+pre {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  overflow: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Seleção de texto */
+::selection {
+  background: color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+/* Animações */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pequenos aprimoramentos para telas muito estreitas */
+@media (max-width: 420px) {
+  button,
+  input[type="submit"],
+  input[type="button"] {
+    width: 100%;
+  }
+}

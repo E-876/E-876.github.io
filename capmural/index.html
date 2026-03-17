@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>mural cap 80 ano</title>
+  <link rel="stylesheet" href="./style.css">
+  <style>
+    #importantAvisos {
+      margin-bottom: 30px;
+      padding: 15px;
+      background-color: #fff3cd;
+      border: 2px solid #ffc107;
+      border-radius: 5px;
+    }
+
+    #importantAvisos h2 {
+      color: #ff6b6b;
+      margin-top: 0;
+    }
+
+    #importantList {
+      margin: 0;
+      padding-left: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>mural cap 80M1</h1>
+
+  <div id="importantAvisos">
+    <h2>⚠️ AVISOS IMPORTANTES</h2>
+    <ul id="importantList"></ul>
+  </div>
+
+  <form id="searchForm">
+    <input type="text" id="searchInput" placeholder="tarefa">
+    <input type="date" id="dateInput">
+    <button type="submit">Pesquisar</button>
+  </form>
+
+  <div id="searchResults"></div>
+
+  <script>
+    // Estado do feed
+    let feed = [];
+    let isLoaded = false;
+
+    // Escape simples para evitar injeção de HTML quando mostramos valores vindos do JSON/usuário
+    function escapeHtml(str) {
+      return String(str).replace(/[&<>"']/g, (m) => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[m]));
+    }
+
+    function escapeAttr(str) {
+      // Para atributos (ex.: href), usa o escape básico e reforça aspas
+      return escapeHtml(str).replace(/"/g, '&quot;');
+    }
+
+    async function loadFeed() {
+      try {
+        const response = await fetch('./informations/feed.json');
+        if (!response.ok) {
+          throw new Error('Falha no carregamento do feed.json');
+        }
+        const data = await response.json();
+        // Garante que data.feed seja um array
+        feed = Array.isArray(data?.feed) ? data.feed : [];
+        isLoaded = true;
+      } catch (error) {
+        console.error('Erro ao carregar feed.json:', error);
+        isLoaded = true; // Evita travar a interface; apenas não haverá resultados
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Inicia o carregamento do feed
+      loadFeed().then(() => {
+        // Carrega avisos importantes
+        const importantList = document.getElementById('importantList');
+        const importantItems = feed.filter(item => item?.importante === true);
+
+        if (importantItems.length === 0) {
+          importantList.innerHTML = '<li>Nenhum aviso importante no momento</li>';
+        } else {
+          importantItems.forEach((item) => {
+            const page = escapeAttr(item?.page || '#');
+            const title = escapeHtml(item?.title || 'Sem título');
+            const li = document.createElement('li');
+            li.innerHTML = '<a href="' + page + '">' + title + '</a>';
+            importantList.appendChild(li);
+          });
+        }
+      });
+
+      // Configuração do formulário de busca
+      const form = document.getElementById('searchForm');
+      const input = document.getElementById('searchInput');
+      const dateInput = document.getElementById('dateInput');
+      const resultsDiv = document.getElementById('searchResults');
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const query = input.value.trim().toLowerCase();
+        const selectedDate = dateInput.value; // Formato: YYYY-MM-DD
+
+        if (!isLoaded) {
+          resultsDiv.innerHTML = '<p>Carregando o índice. Tente novamente em instantes…</p>';
+          return;
+        }
+
+        // Se ambos estão vazios, mostra todos os resultados
+        let filtered;
+        if (query === '' && selectedDate === '') {
+          filtered = feed;
+        } else {
+          // Filtra por título/categoria E data
+          filtered = feed.filter(item => {
+            const title = (item?.title || '').toString().toLowerCase();
+            const category = (item?.category || '').toString().toLowerCase();
+            const itemDate = (item?.date || '').toString();
+
+            // Se query está vazio, busca apenas por data
+            const matchesText = query === '' || title.includes(query) || category.includes(query);
+
+            // Se data está vazia, busca apenas por texto
+            const matchesDate = selectedDate === '' || itemDate === selectedDate;
+
+            return matchesText && matchesDate;
+          });
+        }
+
+        if (filtered.length === 0) {
+          let searchInfo = '';
+          if (query !== '' && selectedDate !== '') {
+            searchInfo = '<strong>' + escapeHtml(query) + '</strong> em <strong>' + escapeHtml(selectedDate) + '</strong>';
+          } else if (query !== '') {
+            searchInfo = '<strong>' + escapeHtml(query) + '</strong>';
+          } else {
+            searchInfo = 'data <strong>' + escapeHtml(selectedDate) + '</strong>';
+          }
+          resultsDiv.innerHTML = '<p>Nenhum resultado encontrado para: ' + searchInfo + '</p>';
+          return;
+        }
+
+        // Monta HTML de resultados com escape
+        let html = '<p>Resultados encontrados: <strong>' + filtered.length + '</strong></p><ul>';
+        filtered.forEach((item) => {
+          const page = escapeAttr(item?.page || '#');
+          const title = escapeHtml(item?.title || 'Sem título');
+          const category = escapeHtml(item?.category || 'Sem categoria');
+          const date = escapeHtml(item?.date || 'Sem data');
+          html += '<li><a href="' + page + '"><strong>' + title + '</strong> - ' + category + ' <span style="color: #666; font-size: 0.9em;">(' + date + ')</span></a></li>';
+        });
+        html += '</ul>';
+        resultsDiv.innerHTML = html;
+      });
+    });
+  </script>
+</body>
+</html>
